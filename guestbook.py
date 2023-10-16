@@ -4,6 +4,7 @@
 __author__ = 'jiangge'
 
 import shelve
+import random
 from datetime import datetime
 from flask import Flask, request, render_template, redirect
 from user_agents import parse
@@ -12,10 +13,10 @@ from user_agents import parse
 
 application = Flask(__name__)
 
-DATA_FILE = 'guestbook.dat'
+DATA_FILE = 'db.dat'
 
 
-def save_data(name, comment, create_at):
+def save_data(name, gender, comment, create_at):
     """
     save data from form submitted
     """
@@ -27,7 +28,7 @@ def save_data(name, comment, create_at):
         greeting_list = database['greeting_list']
 
     greeting_list.insert(
-        0, {'name': name, 'comment': comment, 'create_at': create_at})
+        0, {'name': name, 'gender':gender, 'comment': comment, 'create_at': create_at})
 
     database['greeting_list'] = greeting_list
 
@@ -62,19 +63,25 @@ def post():
     """
     #name = request.form.get('name')
     userAgent = parse(request.user_agent.string)
+    with open('randname.data', 'r') as f:
+    	lines = f.readlines()
+    	random_line = random.choice(lines)
     if userAgent.device.model == 'iPhone':
-        name = '金牌婚礼策划'
+        name = random_line 
+        gender = 0 
     elif userAgent.device.model == 'M2007J1SC':
-        name = '微博热心网友'
+        name = random_line
+        gender = 1
     else:
         name = userAgent
+        gender = -1
     comment = request.form.get('comment')
     create_at = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-    save_data(name, comment, create_at)
+    save_data(name, gender, comment, create_at)
 
     return redirect('/')
 
 
 if __name__ == '__main__':
-    application.run('0.0.0.0', port=5000, debug=True)
+    application.run('0.0.0.0', port=80, debug=False)

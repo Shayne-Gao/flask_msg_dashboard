@@ -12,7 +12,7 @@
 </head>
 <body>
      <div id="open-btn">
-        <a href="#" class="open-btn" style="display: block;background-color:#007bff;width: 100px;"> &nbsp; </a>
+        <a href="#" class="open-btn" style="display: block;width: 100px;"> &nbsp; </a>
     </div>
 <div class="container col-sm-4 col-md-7 col-lg-4 mt-4">
     <div class="card">
@@ -116,7 +116,15 @@
     <div id="entries-area" style="display: none; margin-top:200px">
         <div class="form-control col-sm-4" >
             {% for greeting in greeting_list%}
-            {{greeting.name}} at {{greeting.create_at}}
+			{% if greeting.gender == 1%}
+				<div style='color:blue'> 
+					♂			
+			{% else %}
+				 <div style='color:red'> 
+					♀
+			{% endif %}
+				{{greeting.name}}
+			</div> at {{greeting.create_at}}
             <p><b>{{greeting.comment}}</b></p>
             <br>
             {% endfor %}
