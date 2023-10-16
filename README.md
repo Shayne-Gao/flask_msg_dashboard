@@ -4,4 +4,5 @@ flask-guestbook
 
 使用Python 的 shelve 做为存储。
 
+练手用
 #TODO 修改成 MySQL 或者 Redis 存储。
